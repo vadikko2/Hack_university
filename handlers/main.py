@@ -86,77 +86,101 @@ def main_body(male_data, female_data):
                 };
                 
                 document.getElementById('everyone').addEventListener('click', function() {
-                    lineconfig.data.datasets = main_data;
+                    lineconfig.data.datasets = [{
+                        label: 'Male',
+                        backgroundColor: window.chartColors.blue,
+                        borderColor: window.chartColors.blue,
+                        data: $male_data.total,
+                        fill: false,
+                    },
+                    {
+                        label: 'Female',
+                        backgroundColor: window.chartColors.red,
+                        borderColor: window.chartColors.red,
+                        data: $female_data.total,
+                        fill: false,
+                    }];;
                     window.myLine.update();
                 });
 
                 document.getElementById('maleOnly').addEventListener('click', function() {
+                    console.log('male', lineconfig.data.datasets);
+
                     lineconfig.data.datasets = [main_data[0]];
                     window.myLine.update();
                 });
 
                 document.getElementById('femaleOnly').addEventListener('click', function() {
+                    console.log('famela', lineconfig.data.datasets);
+
                     lineconfig.data.datasets = [main_data[1]];
                     window.myLine.update();
                 });
 
                 document.getElementById('under18').addEventListener('click', function() {
+                    console.log('under', lineconfig.data.datasets);
 
                     for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data;
+                            current_data = $male_data.under18;
                         }
                         else {
-                            current_data = $female_data;
+                            current_data = $female_data.under18;
                         }
-                        lineconfig.data.datasets[i].data = current_data.under18;
+                        lineconfig.data.datasets[i].data = current_data;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('middleAge').addEventListener('click', function() { 
+                    console.log('middle', lineconfig.data.datasets);
+                   
                     for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data;
+                            current_data = $male_data.middleAge;
                         }
                         else {
-                            current_data = $female_data;
+                            current_data = $female_data.middleAge;
                         }
-                        lineconfig.data.datasets[i].data = current_data.middleAge;
+                        lineconfig.data.datasets[i].data = current_data;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('culmination').addEventListener('click', function() {   
+                    console.log('culim', lineconfig.data.datasets);
+
                     for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data;
+                            current_data = $male_data.culmination;
                         }
                         else {
-                            current_data = $female_data;
+                            current_data = $female_data.culmination;
                         }
-                        lineconfig.data.datasets[i].data = current_data.culmination;
+                        lineconfig.data.datasets[i].data = current_data;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('elder').addEventListener('click', function() {
+                    console.log('elder', lineconfig.data.datasets);
+
                     for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data;
+                            current_data = $male_data.elder;
                         }
                         else {
-                            current_data = $female_data;
+                            current_data = $female_data.elder;
                         }
-                        lineconfig.data.datasets[i].data = current_data.elder;
+                        lineconfig.data.datasets[i].data = current_data;
                     }
                     window.myLine.update();
                 });
