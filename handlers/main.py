@@ -197,7 +197,7 @@ def main_body(male_data, female_data):
                         labels: ['under 18', '18-35', '35-50', '50 and older'],
                         datasets: [{
                             label: 'Male',
-                            backgroundColor: Chart.helpers.color(window.chartColors.blue).alpha(0.5).rgbString(),
+                            backgroundColor: window.chartColors.blue,
                             borderColor: window.chartColors.blue,
                             borderWidth: 1,
                             data: [
@@ -207,7 +207,7 @@ def main_body(male_data, female_data):
                                 $male_data.elder.reduce(add, 0)]
                         }, {
                             label: 'Female',
-                            backgroundColor: Chart.helpers.color(window.chartColors.red).alpha(0.5).rgbString(),
+                            backgroundColor: window.chartColors.red,
                             borderColor: window.chartColors.red,
                             borderWidth: 1,
                             data: [
