@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import dlib
 
-from keras.models import Model, Sequential
+from keras.models import Model, Sequential, load_model
 from keras.layers import Input, Activation, merge, Dense, Flatten, Dropout
 from keras.layers.convolutional import Convolution2D, AveragePooling2D
 from keras.layers.normalization import BatchNormalization
@@ -19,6 +19,9 @@ import sys
 sys.setrecursionlimit(2 ** 20)
 np.random.seed(2 ** 10)
 
+
+def _load_model(filename):
+    return load_model(filename)
 
 def pad_sequences(dataSet, seq_len = 24):
     
@@ -88,22 +91,23 @@ def visModel(model,savePath = None, name = 'model_structure'):
 
 class IntensRecModelCreater:
     
-    def __init__(self, look_back = 24, input_dim = 1, recBlock_type = 'GRU'):
+    def __init__(self, look_back = 24, input_dim = 1, recBlock_type = 'GRU', power = 64):
         
         self.inputSize = (look_back,input_dim)
         self.recBlock_type = recBlock_type
-       
+        self.power = power
+        
     def __call__(self):
         
         model = Sequential()
     
         if self.recBlock_type == 'GRU':
-            model.add(GRU(64, return_sequences = False, input_shape = self.inputSize))
+            model.add(GRU(self.power, return_sequences = False, input_shape = self.inputSize))
             
         elif self.recBlock_type == 'LSTM':   
-            model.add(LSTM(64, return_sequences = False, input_shape = self.inputSize))
+            model.add(LSTM(self.power, return_sequences = False, input_shape = self.inputSize))
 
-        model.add(Dense(1,activation = 'linear'))
+        model.add(Dense(1,activation = 'relu'))
 
         model.compile(loss = 'mse', optimizer = 'adam')
 
