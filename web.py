@@ -6,7 +6,6 @@ import asyncio
 
 
 if __name__ == '__main__':
-
     app = web.Application()
 
     app.router.add_static(prefix='/js/', path='./js/')

@@ -5,8 +5,6 @@ from string import Template
 def bars(men_data, women_data):
     html = """
     <body>
-        <script src="./js/chart.js"></script>
-	    <script src="./js/utils.js"></script>
         <style>
         canvas {
             -moz-user-select: none;
@@ -36,7 +34,6 @@ def bars(men_data, women_data):
                     borderWidth: 1,
                     data: [$women_data]
                 }]
-    
             };
     
             window.onload = function() {
@@ -54,11 +51,11 @@ def bars(men_data, women_data):
                         }
                     }
                 });
-    
             };
-    
-            
+               
         </script>
+        <script src="./js/chart.js"></script>
+	    <script src="./js/utils.js"></script>
     </body>
     """
     return Template(html).safe_substitute(men_data=men_data, women_data=women_data)
