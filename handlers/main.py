@@ -5,27 +5,13 @@ from string import Template
 def main_body(men_data, women_data):
 
     html = """
-        <body>
+        <head>
+            <link rel="stylesheet" href="./css/style.css">
             <script src="./js/chart.js"></script>
     	    <script src="./js/utils.js"></script>
-
-            <style>
-                line-canvas{
-                    -moz-user-select: none;
-                    -webkit-user-select: none;
-                    -ms-user-select: none;
-                },
-                bars-canvas {
-                    -moz-user-select: none;
-                    -webkit-user-select: none;
-                    -ms-user-select: none;
-                },
-                #container {width: 100%;}
-                #bars  {float:left;}
-                #pie  {float:right;}
-            </style>
-
-            <div style="width:100%;" align="center">
+        </head>
+        <body>   
+            <div id="line">
                 <canvas id="line-canvas"></canvas>
                 <button id="menOnly">Men</button>
                 <button id="womenOnly">Women</button>
@@ -39,15 +25,17 @@ def main_body(men_data, women_data):
             </div>  
              
             <div id="container">
-                <div id="bars" style="width: 60%;">
+                <div id="bars">
                     <canvas id="bars-canvas"></canvas>
                 </div>
                 <br><br><br><br><br>
-                <div id="pie" style="width: 40%;">
+                <div id="pie">
                     <canvas id="pie-canvas"></canvas>
                 </div>
             </div>
+            
             <br>
+            
             <script>
                 var lineconfig = {
                     type: 'line',

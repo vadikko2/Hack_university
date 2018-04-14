@@ -11,6 +11,8 @@ if __name__ == '__main__':
     app = web.Application()
 
     app.router.add_static(prefix='/js/', path='./js/')
+    app.router.add_static(prefix='/css/', path='./css/')
+
     app.router.add_route('GET', '/pie', pie_chart_handler)
     app.router.add_route('GET', '/line', line_chart_handler)
     app.router.add_route('GET', '/bars', bars_chart_handler)
