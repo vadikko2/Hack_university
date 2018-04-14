@@ -5,6 +5,9 @@ from string import Template
 def line(men_data, women_data):
     html = """
     <body>
+        <script src="./js/chart.js"></script>
+	    <script src="./js/utils.js"></script>
+	    
         <style>
             canvas{
                 -moz-user-select: none;
@@ -127,7 +130,8 @@ def line(men_data, women_data):
                 window.myLine.update();
             });
             
-            document.getElementById('under18').addEventListener('click', function() {   
+            document.getElementById('under18').addEventListener('click', function() {
+   
                 for (var index = 0; index < config.data.datasets.length; ++index) {
                     var current_data = config.data.datasets[index].label;
                     
@@ -186,10 +190,7 @@ def line(men_data, women_data):
                 }
                 window.myLine.update();
             });
-            
         </script>
-        <script src="./js/chart.js"></script>
-	    <script src="./js/utils.js"></script>
     </body>
     """
     return Template(html).safe_substitute(men_data=men_data, women_data=women_data)

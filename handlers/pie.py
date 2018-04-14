@@ -8,7 +8,8 @@ def pie(men, women):
         <div id="canvas-holder" style="width:40%">
             <canvas id="chart-area"></canvas>
         </div>
-        
+        <script src="./js/chart.js"></script>
+        <script src="./js/utils.js"></script>
         <script>
             var config = {
                 type: 'pie',
@@ -38,8 +39,6 @@ def pie(men, women):
                 window.myPie = new Chart(ctx, config);
             };
         </script>
-        <script src="./js/chart.js"></script>
-        <script src="./js/utils.js"></script>
     </body>
     """
     return Template(html).safe_substitute(men=men, women=women)
