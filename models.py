@@ -8,9 +8,10 @@ from keras.layers.convolutional import Convolution2D, AveragePooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.regularizers import l2
 from keras import backend as K
-
+from keras.layers.recurrent import LSTM, GRU
 from keras.utils.vis_utils import model_to_dot
 from keras.utils import plot_model
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 import logging
 import sys
@@ -18,8 +19,49 @@ import sys
 sys.setrecursionlimit(2 ** 20)
 np.random.seed(2 ** 10)
 
-def fitModel(model, train_X, train_Y, val_rate = 0.1):
-    pass
+
+def pad_sequences(dataSet, seq_len = 24):
+    
+    from copy import deepcopy
+
+    X = []
+    Y = []
+
+    for data in range(len(dataSet) - seq_len):
+        temp = []
+        x = 0
+        while x < seq_len:
+            if type(dataSet[data + x]) is not list:
+                temp.append([dataSet[data + x]])
+            else:    
+                temp.append(dataSet[data + x])
+                
+            x += 1
+            
+        X.append(deepcopy(temp))
+        Y.append(deepcopy(dataSet[data + x]))
+
+    return np.array(X), np.array(Y)
+
+
+
+
+def fitModel(model, train_X, train_Y, filename, val_rate = 0.1, epochs = 10000, batch_size = None):
+    
+    idx = int((len(train_X) * val_rate))
+    
+    val_X, val_Y = train_X[-idx:], train_Y[-idx:]
+    train_X, train_Y = train_X[:-idx], train_Y[:-idx]
+    
+    if batch_size == 0:
+        batch_size = len(train_X)
+     
+    es = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=0, mode='auto')
+    mc = ModelCheckpoint(filename, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+    
+    return model.fit(train_X, train_Y, validation_data = (val_X, val_Y),
+              epochs = epochs, batch_size = batch_size, shuffle = True,
+              callbacks = [es,mc])
 
 def visModel(model,savePath = None, name = 'model_structure'):
         
@@ -27,6 +69,30 @@ def visModel(model,savePath = None, name = 'model_structure'):
         plot_model(model,to_file= savePath + name + '.png' , show_shapes=True)
 
     return model_to_dot(model, show_shapes=True).create(prog='dot', format='svg')
+
+
+class IntensRecModelCreater:
+    
+    def __init__(self, look_back = 24, input_dim = 1, recBlock_type = 'GRU'):
+        
+        self.inputSize = (look_back,input_dim)
+        self.recBlock_type = recBlock_type
+       
+    def __call__(self):
+        
+        model = Sequential()
+    
+        if self.recBlock_type == 'GRU':
+            model.add(GRU(16, return_sequences = False, input_shape = self.inputSize))
+            
+        elif self.recBlock_type == 'LSTM':   
+            model.add(LSTM(16, return_sequences = False, input_shape = self.inputSize))
+
+        model.add(Dense(1,activation = 'linear'))
+
+        model.compile(loss = 'mse', optimizer = 'adam')
+
+        return model
 
     
 class FaceDetection:
@@ -67,6 +133,7 @@ class FaceDescription:
         return faces
     
 class WideResNetCreater:
+    
     def __init__(self, image_size = 64, depth=16, k=8):
         self._depth = depth
         self._k = k
