@@ -44,14 +44,29 @@ def pad_sequences(dataSet, seq_len = 24):
     return np.array(X), np.array(Y)
 
 
+def _shuffle(X,Y):
+    
+    from random import shuffle
+        
+    data = list(zip(X, Y))
+    shuffle(data)
+
+    dataSet_X, dataSet_Y = zip(*data)
+
+    dataSet_X = np.array(dataSet_X)        
+    dataSet_Y = np.array(dataSet_Y)
+
+    return dataSet_X, dataSet_Y
 
 
-def fitModel(model, train_X, train_Y, filename, val_rate = 0.1, epochs = 10000, batch_size = None):
+def fitModel(model, train_X, train_Y, filename, val_rate = 0.1, epochs = 1000, batch_size = None):
     
-    idx = int((len(train_X) * val_rate))
+    X,Y = _shuffle(train_X, train_Y)
+   
+    idx = int((len(X) * val_rate))
     
-    val_X, val_Y = train_X[-idx:], train_Y[-idx:]
-    train_X, train_Y = train_X[:-idx], train_Y[:-idx]
+    val_X, val_Y = X[-idx:], Y[-idx:]
+    X, Y = X[:-idx], Y[:-idx]
     
     if batch_size == 0:
         batch_size = len(train_X)
@@ -59,8 +74,8 @@ def fitModel(model, train_X, train_Y, filename, val_rate = 0.1, epochs = 10000, 
     es = EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=0, mode='auto')
     mc = ModelCheckpoint(filename, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
     
-    return model.fit(train_X, train_Y, validation_data = (val_X, val_Y),
-              epochs = epochs, batch_size = batch_size, shuffle = True,
+    return model.fit(X, Y, validation_data = (val_X, val_Y),
+              epochs = epochs, batch_size = batch_size,
               callbacks = [es,mc])
 
 def visModel(model,savePath = None, name = 'model_structure'):
@@ -83,10 +98,10 @@ class IntensRecModelCreater:
         model = Sequential()
     
         if self.recBlock_type == 'GRU':
-            model.add(GRU(16, return_sequences = False, input_shape = self.inputSize))
+            model.add(GRU(64, return_sequences = False, input_shape = self.inputSize))
             
         elif self.recBlock_type == 'LSTM':   
-            model.add(LSTM(16, return_sequences = False, input_shape = self.inputSize))
+            model.add(LSTM(64, return_sequences = False, input_shape = self.inputSize))
 
         model.add(Dense(1,activation = 'linear'))
 
