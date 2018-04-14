@@ -1,8 +1,7 @@
-from aiohttp import web
 from string import Template
 
 
-def main_body(men_data, women_data):
+def main_body(male_data, female_data):
 
     html = """
         <head>
@@ -13,8 +12,8 @@ def main_body(men_data, women_data):
         <body>   
             <div id="line">
                 <canvas id="line-canvas"></canvas>
-                <button id="menOnly">Men</button>
-                <button id="womenOnly">Women</button>
+                <button id="maleOnly">Men</button>
+                <button id="femaleOnly">Women</button>
                 <button id="everyone">Everyone</button>
                 <br>
                 <button id="under18">Under 18</button>
@@ -37,29 +36,30 @@ def main_body(men_data, women_data):
             <br>
             
             <script>
+                var main_data = [{
+                    label: 'Male',
+                    backgroundColor: window.chartColors.blue,
+                    borderColor: window.chartColors.blue,
+                    data: $male_data.total,
+                    fill: false,
+                },
+                {
+                    label: 'Female',
+                    backgroundColor: window.chartColors.red,
+                    borderColor: window.chartColors.red,
+                    data: $female_data.total,
+                    fill: false,
+                }];
                 var lineconfig = {
                     type: 'line',
                     data: {
-                        labels: ['1', '5', '9', '13', '17', '19', '23'],
-                        datasets: [{
-                            label: 'Men',
-                            backgroundColor: window.chartColors.blue,
-                            borderColor: window.chartColors.blue,
-                            data: $men_data.total,
-                            fill: false,
-                        },
-                        {
-                            label: 'Women',
-                            backgroundColor: window.chartColors.red,
-                            borderColor: window.chartColors.red,
-                            data: $women_data.total,
-                            fill: false,
-                        }]
+                        labels: ['0', '4', '8', '12', '16', '20', '24'],
+                        datasets: main_data
                     },
                     options: {
                         responsive: true,
                         tooltips: {
-                            mode: 'index',
+                            mode: 'i',
                             intersect: false,
                         },
                         hover: {
@@ -84,109 +84,79 @@ def main_body(men_data, women_data):
                         }
                     }
                 };
-    
-                var colorNames = Object.keys(window.chartColors);
-
+                
                 document.getElementById('everyone').addEventListener('click', function() {
-                    var all = [{
-                            label: 'Men',
-                            backgroundColor: window.chartColors.blue,
-                            borderColor: window.chartColors.blue,
-                            data: $men_data.total,
-                            fill: false,
-                        },
-                        {
-                            label: 'Women',
-                            backgroundColor: window.chartColors.red,
-                            borderColor: window.chartColors.red,
-                            data: $women_data.total,
-                            fill: false,
-                        }] 
-                    lineconfig.data.datasets = all;
+                    lineconfig.data.datasets = main_data;
                     window.myLine.update();
                 });
 
-                document.getElementById('menOnly').addEventListener('click', function() {
-                    var men = [{
-                            label: 'Men',
-                            backgroundColor: window.chartColors.blue,
-                            borderColor: window.chartColors.blue,
-                            data: $men_data.total,
-                            fill: false,
-                        }]
-                    lineconfig.data.datasets = men;
+                document.getElementById('maleOnly').addEventListener('click', function() {
+                    lineconfig.data.datasets = [main_data[0]];
                     window.myLine.update();
                 });
 
-                document.getElementById('womenOnly').addEventListener('click', function() {
-                    var women = [{
-                            label: 'Women',
-                            backgroundColor: window.chartColors.red,
-                            borderColor: window.chartColors.red,
-                            data: $women_data.total,
-                            fill: false,
-                        }]   
-                    lineconfig.data.datasets = women;
+                document.getElementById('femaleOnly').addEventListener('click', function() {
+                    lineconfig.data.datasets = [main_data[1]];
                     window.myLine.update();
                 });
 
                 document.getElementById('under18').addEventListener('click', function() {
 
-                    for (var index = 0; index < lineconfig.data.datasets.length; ++index) {
-                        var current_data = lineconfig.data.datasets[index].label;
+                    for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
+                        var current_data = lineconfig.data.datasets[i].label;
 
-                        if (current_data == 'Men') {
-                            current_data = $men_data;
+                        if (current_data == 'Male') {
+                            current_data = $male_data;
                         }
                         else {
-                            current_data = $women_data;
+                            current_data = $female_data;
                         }
-                        lineconfig.data.datasets[index].data = current_data.under18;
+                        lineconfig.data.datasets[i].data = current_data.under18;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('middleAge').addEventListener('click', function() { 
-                    for (var index = 0; index < lineconfig.data.datasets.length; ++index) {
-                        var current_data = lineconfig.data.datasets[index].label;
+                    for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
+                        var current_data = lineconfig.data.datasets[i].label;
 
-                        if (current_data == 'Men') {
-                            current_data = $men_data;
+                        if (current_data == 'Male') {
+                            current_data = $male_data;
                         }
                         else {
-                            current_data = $women_data;
+                            current_data = $female_data;
                         }
-                        lineconfig.data.datasets[index].data = current_data.middleAge;
+                        lineconfig.data.datasets[i].data = current_data.middleAge;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('culmination').addEventListener('click', function() {   
-                    for (var index = 0; index < lineconfig.data.datasets.length; ++index) {
-                        var current_data = lineconfig.data.datasets[index].label;
+                    for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
+                        var current_data = lineconfig.data.datasets[i].label;
 
-                        if (current_data == 'Men') {
-                            current_data = $men_data;
+                        if (current_data == 'Male') {
+                            current_data = $male_data;
                         }
                         else {
-                            current_data = $women_data;
+                            current_data = $female_data;
                         }
-                        lineconfig.data.datasets[index].data = current_data.culmination;
+                        lineconfig.data.datasets[i].data = current_data.culmination;
                     }
                     window.myLine.update();
                 });
 
                 document.getElementById('elder').addEventListener('click', function() {
-                    for (var index = 0; index < lineconfig.data.datasets.length; ++index) {
-                        var current_data = lineconfig.data.datasets[index].label;
+                    for (var i = 0; i < lineconfig.data.datasets.length; ++i) {
+                        var current_data = lineconfig.data.datasets[i].label;
 
-                        if (current_data == 'Men') {
-                            current_data = $men_data;
+                        if (current_data == 'Male') {
+                            current_data = $male_data;
                         }
                         else {
-                            current_data = $women_data;
+                            current_data = $female_data;
                         }
-                        lineconfig.data.datasets[index].data = current_data.elder;
+                        lineconfig.data.datasets[i].data = current_data.elder;
                     }
                     window.myLine.update();
                 });
@@ -196,27 +166,33 @@ def main_body(men_data, women_data):
                 function add(a, b) {
                     return a + b;
                 }
-                  
-                var barChartData = {
-                    labels: ['under 18', '18-35', '35-50', '50 and older'],
-                    datasets: [{
-                        label: 'Men',
-                        backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-                        borderColor: window.chartColors.blue,
-                        borderWidth: 1,
-                        data: [$men_data.under18.reduce(add, 0), $men_data.middleAge.reduce(add, 0), $men_data.culmination.reduce(add, 0), $men_data.elder.reduce(add, 0)]
-                    }, {
-                        label: 'Women',
-                        backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-                        borderColor: window.chartColors.red,
-                        borderWidth: 1,
-                        data: [$women_data.under18.reduce(add, 0), $women_data.middleAge.reduce(add, 0), $women_data.culmination.reduce(add, 0), $women_data.elder.reduce(add, 0)]
-                    }]
-                };     
                 
                 var barsconfig = {
                     type: 'bar',
-                    data: barChartData,
+                    data: {
+                        labels: ['under 18', '18-35', '35-50', '50 and older'],
+                        datasets: [{
+                            label: 'Male',
+                            backgroundColor: Chart.helpers.color(window.chartColors.blue).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.blue,
+                            borderWidth: 1,
+                            data: [
+                                $male_data.under18.reduce(add, 0), 
+                                $male_data.middleAge.reduce(add, 0), 
+                                $male_data.culmination.reduce(add, 0), 
+                                $male_data.elder.reduce(add, 0)]
+                        }, {
+                            label: 'Female',
+                            backgroundColor: Chart.helpers.color(window.chartColors.red).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.red,
+                            borderWidth: 1,
+                            data: [
+                                $female_data.under18.reduce(add, 0), 
+                                $female_data.middleAge.reduce(add, 0), 
+                                $female_data.culmination.reduce(add, 0), 
+                                $female_data.elder.reduce(add, 0)]
+                        }]
+                    },
                     options: {
                         responsive: true,
                         legend: {
@@ -233,8 +209,8 @@ def main_body(men_data, women_data):
                     data: {
                         datasets: [{
                             data: [
-                                $men_data.percentage,
-                                $women_data.percentage
+                                $male_data.percentage,
+                                $female_data.percentage
                             ],
                             backgroundColor: [
                                 window.chartColors.blue,
@@ -242,8 +218,8 @@ def main_body(men_data, women_data):
                             ],
                         }],
                         labels: [
-                            'Men',
-                            'Women'
+                            'Male',
+                            'Female'
                         ]
                     },
                     options: {
@@ -252,16 +228,16 @@ def main_body(men_data, women_data):
                 };
         
                 window.onload = function() {
-                    var piectx = document.getElementById('pie-canvas').getContext('2d');
-                    window.myPie = new Chart(piectx, pieconfig);
+                    var piecontex = document.getElementById('pie-canvas').getContext('2d');
+                    window.myPie = new Chart(piecontex, pieconfig);
                     
-                    var barsctx = document.getElementById('bars-canvas').getContext('2d');
-                    window.myBar = new Chart(barsctx, barsconfig);
+                    var barscontex = document.getElementById('bars-canvas').getContext('2d');
+                    window.myBar = new Chart(barscontex, barsconfig);
                     
-                    var linectx = document.getElementById('line-canvas').getContext('2d');
-                    window.myLine = new Chart(linectx, lineconfig);
+                    var linecontex = document.getElementById('line-canvas').getContext('2d');
+                    window.myLine = new Chart(linecontex, lineconfig);
                 }
             </script>
         </body>
         """
-    return Template(html).safe_substitute(men_data=men_data, women_data=women_data)
+    return Template(html).safe_substitute(male_data=male_data, female_data=female_data)

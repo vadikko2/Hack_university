@@ -25,7 +25,7 @@ if __name__ == '__main__':
         localhost:8080/ - main screen with big line chart above and bars chart below to the left and pie to the right
     '''
 
-    men_data = {
+    male_data = {
         'under18': [4, 5, 0, 3, 3, 0, 1],
         'middleAge': [3, 6, 2, 2, 4, 2, 6],
         'culmination': [3, 2, 2, 2, 4, 0, 5],
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         'percentage': 66 * 100 / (66 + 107)
     }
 
-    women_data = {
+    female_data = {
         'under18': [3, 8, 2, 1, 5, 1, 3],
         'middleAge': [6, 11, 8, 8, 3, 0, 1],
         'culmination': [5, 8, 3, 4, 2, 1, 0],
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
 
     async def main_handler(data):
-        return web.Response(body=main_body(men_data=men_data, women_data=women_data), content_type='text/html')
+        return web.Response(body=main_body(male_data=male_data, female_data=female_data), content_type='text/html')
 
 
     app.router.add_route('GET', '/', main_handler)
