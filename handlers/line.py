@@ -9,16 +9,17 @@ def line(men_data, women_data):
 	    <script src="./js/utils.js"></script>
 	    
         <style>
-            canvas{
+            line-canvas{
                 -moz-user-select: none;
                 -webkit-user-select: none;
                 -ms-user-select: none;
             }
         </style>
         
-        <div style="width:75%;">
-            <canvas id="canvas"></canvas>
+        <div style="width:100%;">
+            <canvas id="line-canvas"></canvas>
         </div>
+        
         
         <button id="menOnly">Men</button>
         <button id="womenOnly">Women</button>
@@ -82,7 +83,7 @@ def line(men_data, women_data):
             };
     
             window.onload = function() {
-                var ctx = document.getElementById('canvas').getContext('2d');
+                var ctx = document.getElementById('line-canvas').getContext('2d');
                 window.myLine = new Chart(ctx, config);
             }; 
             var colorNames = Object.keys(window.chartColors);

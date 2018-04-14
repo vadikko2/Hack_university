@@ -2,6 +2,8 @@ from aiohttp import web
 from handlers.pie import pie_chart_handler
 from handlers.line import line_chart_handler
 from handlers.bars import bars_chart_handler
+from handlers.main import main_body
+
 import asyncio
 
 
@@ -17,7 +19,34 @@ if __name__ == '__main__':
         localhost:8080/pie - pie chart with men/women percentage
         localhost:8080/line - line chart with granular options selection
         localhost:8080/bars - bars chart with men/women number by age
+        
+        localhost:8080/ - main screen with big line chart above and bars chart below to the left and pie to the right
     '''
+
+    men_data = {
+        'under18': [4, 5, 0, 3, 3, 0, 1],
+        'middleAge': [3, 6, 2, 2, 4, 2, 6],
+        'culmination': [3, 2, 2, 2, 4, 0, 5],
+        'elder': [0, 2, 1, 1, 0, 1, 2],
+        'total': [10, 15, 5, 8, 11, 3, 14],
+        'percentage': 66 * 100 / (66 + 107)
+    }
+
+    women_data = {
+        'under18': [3, 8, 2, 1, 5, 1, 3],
+        'middleAge': [6, 11, 8, 8, 3, 0, 1],
+        'culmination': [5, 8, 3, 4, 2, 1, 0],
+        'elder': [1, 3, 2, 6, 5, 3, 4],
+        'total': [15, 30, 15, 19, 15, 5, 8],
+        'percentage': 107 * 100 / (66 + 107)
+    }
+
+
+    async def main_handler(data):
+        return web.Response(body=main_body(men_data=men_data, women_data=women_data), content_type='text/html')
+
+
+    app.router.add_route('GET', '/', main_handler)
 
     loop = asyncio.get_event_loop()
     handler = app.make_handler()

@@ -9,15 +9,15 @@ def bars(men_data, women_data):
 	    <script src="./js/utils.js"></script>
 	    
         <style>
-        canvas {
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-        }
+            bars-canvas {
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+            }
         </style>
         
-        <div id="container" style="width: 75%;">
-            <canvas id="canvas"></canvas>
+        <div style="width: 75%;">
+            <canvas id="bars-canvas"></canvas>
         </div>
         
         <script>
@@ -40,7 +40,7 @@ def bars(men_data, women_data):
             };
     
             window.onload = function() {
-                var ctx = document.getElementById('canvas').getContext('2d');
+                var ctx = document.getElementById('bars-canvas').getContext('2d');
                 window.myBar = new Chart(ctx, {
                     type: 'bar',
                     data: barChartData,

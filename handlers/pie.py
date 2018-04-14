@@ -5,8 +5,8 @@ from string import Template
 def pie(men, women):
     html = """
     <body>
-        <div id="canvas-holder" style="width:40%">
-            <canvas id="chart-area"></canvas>
+        <div style="width:25%">
+            <canvas id="pie-canvas"></canvas>
         </div>
         <script src="./js/chart.js"></script>
         <script src="./js/utils.js"></script>
@@ -35,7 +35,7 @@ def pie(men, women):
             };
     
             window.onload = function() {
-                var ctx = document.getElementById('chart-area').getContext('2d');
+                var ctx = document.getElementById('pie-canvas').getContext('2d');
                 window.myPie = new Chart(ctx, config);
             };
         </script>
