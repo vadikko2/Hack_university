@@ -14,6 +14,12 @@ if __name__ == '__main__':
     app.router.add_route('GET', '/line', line_chart_handler)
     app.router.add_route('GET', '/bars', bars_chart_handler)
 
+    '''
+        localhost:8080/pie - pie chart with men/women percentage
+        localhost:8080/line - line chart with granular options selection
+        localhost:8080/bars - bars chart with men/women number by age
+    '''
+
     loop = asyncio.get_event_loop()
     handler = app.make_handler()
 
