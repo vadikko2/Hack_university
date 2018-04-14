@@ -43,7 +43,7 @@ def main_body(men_data, women_data):
                     <canvas id="bars-canvas"></canvas>
                 </div>
                 <br><br><br><br><br>
-                <div id="pie" style="width: 40%">
+                <div id="pie" style="width: 40%;">
                     <canvas id="pie-canvas"></canvas>
                 </div>
             </div>
