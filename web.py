@@ -7,7 +7,7 @@ import json
 import asyncio
 
 
-if __name__ == '__main__':
+def main():
     app = web.Application()
 
     app.router.add_static(prefix='/js/', path='./js/')
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     handler = app.make_handler()
 
-    server = loop.create_server(handler, 'localhost', 8081)
+    server = loop.create_server(handler, 'localhost', 8082)
 
     loop.run_until_complete(server)
     loop.run_forever()

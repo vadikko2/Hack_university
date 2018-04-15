@@ -84,7 +84,19 @@ class DataBase:
         array_strs = [str(v) for v in array]
         return ';'.join(array_strs)
 
-    def getstatistic(self, num_frames):
+    @staticmethod
+    def chunk(seq, num):
+        avg = len(seq) / float(num)
+        out = []
+        last = 0.0
+
+        while last < len(seq):
+            out.append(seq[int(last):int(last + avg)])
+            last += avg
+
+        return out
+
+    def getstatistic(self, num_frames, len_statisticts):
         inarea = self.load()
         male = {
             'C':[0 for i in range(num_frames)],
@@ -92,7 +104,8 @@ class DataBase:
             'A':[0 for i in range(num_frames)],
             'O':[0 for i in range(num_frames)],
             'total':[],
-            'percentage': 0
+            'percentage': 0,
+            'nframe': 0
         }
         female = {
             'C':[0 for i in range(num_frames)],
@@ -111,20 +124,32 @@ class DataBase:
             else:
                 male[age][nframe]+=1
 
-        male['total'] = [male['C'][i] + male['Y'][i] + male['A'][i] + male['O'][i] for i in range(num_frames)]
-        female['total'] = [female['C'][i] + female['Y'][i] + female['A'][i] + female['O'][i] for i in range(num_frames)]
+        for key in ['C', 'Y', 'A', 'O']:
+            male[key] = self.chunk(male[key], num_frames / len_statisticts)
+            female[key] = self.chunk(female[key], num_frames / len_statisticts)
+
+            for i in range(len(male[key])):
+                male[key][i] = sum(male[key][i])
+
+            for i in range(len(female[key])):
+                female[key][i] = sum(female[key][i])
+
+        male['total'] = [male['C'][i] + male['Y'][i] + male['A'][i] + male['O'][i] for i in range(len(male['C']))]
+        female['total'] = [female['C'][i] + female['Y'][i] + female['A'][i] + female['O'][i] for i in range(len(female['C']))]
         
         maleSum = sum(male['total'])
         femaleSum = sum(female['total'])
 
+
         male['percentage'] = maleSum * 100 / (maleSum + femaleSum)
         female['percentage'] = femaleSum * 100 / (maleSum + femaleSum)
-        print(num_frames, 'numframes')
+        male['nframe'] = num_frames
         with open('male.json', 'w') as f:
             f.write(js.dumps(male, indent = 4))
         with open('female.json', 'w') as f:
             f.write(js.dumps(female, indent = 4))
         return male, female
+    
     def most_common(self, lst):
         return max(set(lst), key=lst.count)
 

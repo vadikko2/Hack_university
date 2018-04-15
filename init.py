@@ -20,7 +20,7 @@ def draw_label(image, point, label, font=cv2.FONT_HERSHEY_SIMPLEX,
     cv2.rectangle(image, (x, y - size[1]), (x + size[0], y), (255, 0, 0), cv2.FILLED)
     cv2.putText(image, label, point, font, font_scale, (255, 255, 255), thickness)
 
-source = 'data/testing.mp4'
+source = 'data/test.mp4'
 
 db = database.DataBase('inarea.json')
 cap = cv2.VideoCapture(source)
@@ -34,11 +34,9 @@ j  = 0
 
 while cap.isOpened():
 
-    for j in range(3):
-        cap.read()
-    
     ret, img = cap.read()
-    
+    for j in range(5):
+    	_, _ = cap.read()
     try:
         #img = cv2.resize(img, (480 * 2,270 * 2))
         img_h, img_w, img_ch = np.shape(img)
@@ -88,10 +86,9 @@ while cap.isOpened():
             else:
                 ages_label[i] = 'O'
 
-            label = "{}{}".format(ages_label[i],"F" if predicted_genders[i][0] > 0.5 else "M")
+            label = "{}-{}".format(ages_label[i],"F" if predicted_genders[i][0] > 0.5 else "M")
             draw_label(img, (d.left(), d.top()), label)
-            #if label[1] == 'F':
-            if label[1] == 'F':
+            if label[2] == 'F':
             	check, index = db._input({'vector':facesV[i], 'age':ages_label[i], 'gender':'F','frame':t})
 
             else:
@@ -101,7 +98,11 @@ while cap.isOpened():
     cv2.imshow('capture', img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-db.getstatistic(t)
+db.getstatistic(t, 7)
 cv2.destroyAllWindows()
 cap.release()
 
+import webbrowser
+import web
+web.main()
+webbrowser.open_new('localhost:8082')
