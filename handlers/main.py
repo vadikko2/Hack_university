@@ -2,6 +2,8 @@ from string import Template
 
 
 def main_body(male_data, female_data):
+    # C, Y, A, O, total, percentage
+    labels = [i for i in range(male_data['nframe'])]
 
     html = """
         <head>
@@ -15,7 +17,6 @@ def main_body(male_data, female_data):
                 <button id="maleOnly">Men</button>
                 <button id="femaleOnly">Women</button>
                 <button id="everyone">Everyone</button>
-                <br>
                 <button id="under18">Under 18</button>
                 <button id="middleAge">18-35</button>
                 <button id="culmination">35-50</button>
@@ -53,7 +54,7 @@ def main_body(male_data, female_data):
                 var lineconfig = {
                     type: 'line',
                     data: {
-                        labels: ['0', '4', '8', '12', '16', '20', '24'],
+                        labels: $labels,
                         datasets: main_data
                     },
                     options: {
@@ -124,10 +125,10 @@ def main_body(male_data, female_data):
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data.under18;
+                            current_data = $male_data.C;
                         }
                         else {
-                            current_data = $female_data.under18;
+                            current_data = $female_data.C;
                         }
                         lineconfig.data.datasets[i].data = current_data;
                     }
@@ -141,10 +142,10 @@ def main_body(male_data, female_data):
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data.middleAge;
+                            current_data = $male_data.Y;
                         }
                         else {
-                            current_data = $female_data.middleAge;
+                            current_data = $female_data.Y;
                         }
                         lineconfig.data.datasets[i].data = current_data;
                     }
@@ -158,10 +159,10 @@ def main_body(male_data, female_data):
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data.culmination;
+                            current_data = $male_data.A;
                         }
                         else {
-                            current_data = $female_data.culmination;
+                            current_data = $female_data.A;
                         }
                         lineconfig.data.datasets[i].data = current_data;
                     }
@@ -175,10 +176,10 @@ def main_body(male_data, female_data):
                         var current_data = lineconfig.data.datasets[i].label;
 
                         if (current_data == 'Male') {
-                            current_data = $male_data.elder;
+                            current_data = $male_data.O;
                         }
                         else {
-                            current_data = $female_data.elder;
+                            current_data = $female_data.O;
                         }
                         lineconfig.data.datasets[i].data = current_data;
                     }
@@ -201,20 +202,20 @@ def main_body(male_data, female_data):
                             borderColor: window.chartColors.blue,
                             borderWidth: 1,
                             data: [
-                                $male_data.under18.reduce(add, 0), 
-                                $male_data.middleAge.reduce(add, 0), 
-                                $male_data.culmination.reduce(add, 0), 
-                                $male_data.elder.reduce(add, 0)]
+                                $male_data.C.reduce(add, 0), 
+                                $male_data.Y.reduce(add, 0), 
+                                $male_data.A.reduce(add, 0), 
+                                $male_data.O.reduce(add, 0)]
                         }, {
                             label: 'Female',
                             backgroundColor: window.chartColors.red,
                             borderColor: window.chartColors.red,
                             borderWidth: 1,
                             data: [
-                                $female_data.under18.reduce(add, 0), 
-                                $female_data.middleAge.reduce(add, 0), 
-                                $female_data.culmination.reduce(add, 0), 
-                                $female_data.elder.reduce(add, 0)]
+                                $female_data.C.reduce(add, 0), 
+                                $female_data.Y.reduce(add, 0), 
+                                $female_data.A.reduce(add, 0), 
+                                $female_data.O.reduce(add, 0)]
                         }]
                     },
                     options: {
@@ -264,4 +265,4 @@ def main_body(male_data, female_data):
             </script>
         </body>
         """
-    return Template(html).safe_substitute(male_data=male_data, female_data=female_data)
+    return Template(html).safe_substitute(male_data=male_data, female_data=female_data, labels=labels)

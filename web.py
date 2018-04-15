@@ -3,7 +3,7 @@ from handlers.pie import pie_chart_handler
 from handlers.line import line_chart_handler
 from handlers.bars import bars_chart_handler
 from handlers.main import main_body
-
+import json
 import asyncio
 
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         localhost:8080/ - main screen with big line chart above and bars chart below to the left and pie to the right
     '''
 
-    male_data = {
+    '''male_data = {
         'under18': [4, 5, 0, 3, 3, 0, 1],
         'middleAge': [3, 6, 2, 2, 4, 2, 6],
         'culmination': [3, 2, 2, 2, 4, 0, 5],
@@ -41,7 +41,10 @@ if __name__ == '__main__':
         'elder': [1, 3, 2, 6, 5, 3, 4],
         'total': [15, 30, 15, 19, 15, 5, 8],
         'percentage': 107 * 100 / (66 + 107)
-    }
+    }'''
+
+    male_data = json.load(open('male.json', 'r'))
+    female_data = json.load(open('female.json', 'r'))
 
 
     async def main_handler(data):
@@ -53,7 +56,7 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     handler = app.make_handler()
 
-    server = loop.create_server(handler, 'localhost', 8080)
+    server = loop.create_server(handler, 'localhost', 8081)
 
     loop.run_until_complete(server)
     loop.run_forever()
