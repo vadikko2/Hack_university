@@ -22,8 +22,7 @@ from scipy.spatial import distance
 class DataBase:
     def __init__(self, buffer_file):
         self.buf = buffer_file
-        if not os.path.exists(self.buf):
-            self.dump([])
+        self.dump([])
     def __call__(self, person_info, action):
         if action:
             self._input(person_info)
@@ -117,7 +116,7 @@ class DataBase:
         }
         for person in inarea:
             age = self.most_common(person['age'])
-            gender = 'F' if 'F' in person['gender'] else 'M'
+            gender = self.most_common(person['gender'])
             nframe = int(sum(person['frame'])/len(person['frame']))
             if gender == 'F':
                 female[age][nframe]+=1
@@ -125,8 +124,8 @@ class DataBase:
                 male[age][nframe]+=1
 
         for key in ['C', 'Y', 'A', 'O']:
-            male[key] = self.chunk(male[key], int(num_frames / len_statisticts))
-            female[key] = self.chunk(female[key], int(num_frames / len_statisticts))
+            male[key] = self.chunk(male[key],  len_statisticts)
+            female[key] = self.chunk(female[key], len_statisticts)
 
             for i in range(len(male[key])):
                 male[key][i] = sum(male[key][i])
@@ -143,7 +142,7 @@ class DataBase:
 
         male['percentage'] = maleSum * 100 / (maleSum + femaleSum)
         female['percentage'] = femaleSum * 100 / (maleSum + femaleSum)
-        male['nframe'] = int(num_frames / len_statisticts)
+        male['nframe'] = len_statisticts
 
         with open('male.json', 'w') as f:
             f.write(js.dumps(male, indent = 4))

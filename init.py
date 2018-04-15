@@ -35,8 +35,7 @@ j  = 0
 while cap.isOpened():
 
     ret, img = cap.read()
-    for j in range(5):
-    	_, _ = cap.read()
+
     try:
         #img = cv2.resize(img, (480 * 2,270 * 2))
         img_h, img_w, img_ch = np.shape(img)
