@@ -125,8 +125,8 @@ class DataBase:
                 male[age][nframe]+=1
 
         for key in ['C', 'Y', 'A', 'O']:
-            male[key] = self.chunk(male[key], num_frames / len_statisticts)
-            female[key] = self.chunk(female[key], num_frames / len_statisticts)
+            male[key] = self.chunk(male[key], int(num_frames / len_statisticts))
+            female[key] = self.chunk(female[key], int(num_frames / len_statisticts))
 
             for i in range(len(male[key])):
                 male[key][i] = sum(male[key][i])
@@ -143,7 +143,8 @@ class DataBase:
 
         male['percentage'] = maleSum * 100 / (maleSum + femaleSum)
         female['percentage'] = femaleSum * 100 / (maleSum + femaleSum)
-        male['nframe'] = num_frames
+        male['nframe'] = int(num_frames / len_statisticts)
+
         with open('male.json', 'w') as f:
             f.write(js.dumps(male, indent = 4))
         with open('female.json', 'w') as f:
