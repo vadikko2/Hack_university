@@ -26,6 +26,19 @@ def main():
     loop.run_until_complete(server)
     loop.run_forever()
 
+    '''
+    
+    async def json_data_handler(json_data):
+        # тут я обрабатываю ваш json
+        
+    послать запрос можете, например, через requests:
+    
+    requests.post(url, data=json_data)
+    
+    я его обработаю хэндлером выше
+    
+    '''
+
 
 if __name__ == '__main__':
     main()
